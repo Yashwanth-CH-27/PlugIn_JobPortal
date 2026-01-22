@@ -52,4 +52,43 @@ authRouter.post("/register", async (req,res) => {
   }
 })
 
+authRouter.post("/login", async(req, res) => {
+  try{
+  const {email, password} = req.body
+  const user = await User.findOne({email})
+
+  if(!user){
+    return res.status(401).json({message: "Invalid emailID"})
+  }
+
+  const isValidPassword = await user.decrypt(password)
+  if(!isValidPassword){
+    return res.status(401).json({message: "Invalid password"})
+  }
+
+  if(!user.isApproved){
+    return res.status(403).json({message: "Account not approved yet"})
+  }
+
+  const token = await user.getJWT()
+  res.cookie("token", token, {
+    httpOnly:true,
+    secure:true,
+    sameSite: "None",
+    maxAge: 7 * 24 * 60 * 60 * 1000
+  })
+
+  res.status(200).json({message: "LogIn successful",
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+    }
+  })
+  }catch(err){
+    res.status(500).json({message: err.message})
+  }
+})
+
 module.exports = authRouter;
