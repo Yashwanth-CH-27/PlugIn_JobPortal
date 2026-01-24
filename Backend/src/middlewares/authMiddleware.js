@@ -12,7 +12,7 @@ const authentication = async(req, res, next) => {
         }
 
         const decodeToken = jwt.verify(token, process.env.JWT_SECRET)
-        const user = await User.findById(decodeToken.id).select("-password")
+        const user = await User.findById(decodeToken._id).select("-password")
 
         if(!user){
             return res.status(401).json({message: "User no longer exists"})
