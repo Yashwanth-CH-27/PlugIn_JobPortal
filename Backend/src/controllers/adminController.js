@@ -21,3 +21,20 @@ exports.approveRecruiter = async(req,res) => {
         res.status(500).json({message : err.message})
     }
 }
+
+exports.approveJob = async(req,res) => {
+    try{
+        const job = await job.findById(req.params.jobId)
+
+        if(!job){
+            return res.status(401).json({message: "job not found"})
+        }
+
+        job.isApproved = true
+        await job.save()
+
+        res.status(200).json({message: "Job approved"})
+    }catch(err){
+        res.status(500).json({message: err.message})
+    }
+}
