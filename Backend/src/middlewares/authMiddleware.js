@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-const jwt = require("jasonwebtoken")
+const jwt = require("jsonwebtoken")
 const User = require("../models/user")
 require("dotenv").config()
 
