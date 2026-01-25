@@ -106,4 +106,30 @@ exports.deleteJob = async(req,res) => {
     }
 }
 
+exports.getApplicationsForJob = async(req,res) => {
+    try {
+        const { jobId } = req.params;
+        const job = await Job.findById(jobId);
+
+        if (!job) {
+        return res.status(401).json({ message: "Job not found" });
+        }
+
+        if (!job.createdBy.equals(req.user._id)) {
+        return res.status(401).json({ message: "Not allowed to view the applications for this job" });
+        }
+
+        const applications = await Application.find({jobId})
+            .populate("applicationId", "name email role")
+            .sort({createdAt: -1})
+
+        res.status(200).json({
+            count: applications.length,
+            applications
+        })
+    }catch(err){
+        res.status(500).json({message: err.message})
+    }
+}
+
 
