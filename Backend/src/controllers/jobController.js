@@ -82,3 +82,28 @@ exports.updateJob = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.deleteJob = async(req,res) => {
+    try{
+        const { jobId } = req.params;
+        const job = await Job.findById(jobId);
+
+        if (!job) {
+        return res.status(401).json({ message: "Job not found" });
+        }
+
+        if (!job.createdBy.equals(req.user._id)) {
+        return res.status(401).json({ message: "You can delete only your job posts" });
+        }
+
+        await Job.findByIdAndDelete(jobId)
+
+        await Application.deleteMany(jobId)
+
+        res.status(200).status({message: "Deletion successful"})
+    }catch(err){
+        res.status(500).json({message: err.message})
+    }
+}
+
+
