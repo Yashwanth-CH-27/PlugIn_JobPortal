@@ -28,7 +28,7 @@ exports.createJob = async (req, res) => {
 
 exports.getMyJobs = async (req, res) => {
   try {
-    const jobs = (await Job.find({ createdBy: req.user._id })).sort({
+    const jobs = await Job.find({ createdBy: req.user._id }).sort({
       createdAt: -1,
     });
 
@@ -68,7 +68,7 @@ exports.updateJob = async (req, res) => {
     ];
 
     allowedUpdated.forEach((field) => {
-      if (req.body[field] !== "undefined") {
+      if (req.body[field] !== undefined) {
         job[field] = req.body[field];
       }
     });
