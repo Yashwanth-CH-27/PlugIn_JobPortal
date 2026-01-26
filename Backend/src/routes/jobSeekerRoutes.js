@@ -3,7 +3,7 @@ const jobSeekerRoute = express.Router();
 const authentication = require("../middlewares/authMiddleware")
 const restrictTo = require("../middlewares/roleMiddleware")
 
-const {getApprovedJobs, getSingleApprovedJob} = require("../controllers/jobController")
+const {getApprovedJobs, singleApprovedJob} = require("../controllers/jobController")
 
 jobSeekerRoute.get("/jobfeed",
   authentication,
@@ -14,7 +14,7 @@ jobSeekerRoute.get("/jobfeed",
 jobSeekerRoute.get("/jobinfo/:jobId",
     authentication,
     restrictTo("jobseeker"),
-    getSingleApprovedJob
+    singleApprovedJob
 )
 
 module.exports = jobSeekerRoute;
