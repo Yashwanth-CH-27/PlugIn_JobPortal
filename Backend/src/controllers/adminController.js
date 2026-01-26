@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const job = require("../models/job");
+const Job = require("../models/job");
 
 exports.approveRecruiter = async (req, res) => {
   try {
@@ -30,7 +30,7 @@ exports.approveJob = async (req, res) => {
       return res.status(401).json({ message: "job not found" });
     }
 
-    job.isApproved = true;
+    Job.isApproved = true;
     await job.save();
 
     res.status(200).json({ message: "Job approved" });
