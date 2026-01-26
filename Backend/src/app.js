@@ -2,7 +2,7 @@ const express = require("express")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 
-const jobSeekerRouter = require("./routes/applicationRoutes")
+const jobSeekerRouter = require("./routes/jobSeekerRoutes")
 const jobRouter = require("./routes/jobRoutes")
 const applicationRouter = require("./routes/applicationRoutes")
 const authRouter = require("./routes/authRoutes")
