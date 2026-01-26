@@ -136,3 +136,24 @@ exports.getApplicationsForJob = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.getApprovedJobs = async (req, res) => {
+  try {
+    const jobs = await Job.find({ isApproved: true })
+      .populate("createdBy", "name email")
+      .sort({ createdAt: -1 });
+
+    if (!jobs) {
+      return res
+        .status(401)
+        .json({ message: "No jobs were found, come again later" });
+    }
+
+    res.status(200).json({
+      totalJobs: jobs.length,
+      jobs,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
