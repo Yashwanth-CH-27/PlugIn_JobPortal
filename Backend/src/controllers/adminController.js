@@ -24,14 +24,14 @@ exports.approveRecruiter = async (req, res) => {
 
 exports.approveJob = async (req, res) => {
   try {
-    const job = await job.findById(req.params.jobId);
+    const job = await Job.findById(req.params.jobId);
 
     if (!job) {
       return res.status(401).json({ message: "job not found" });
     }
 
-    Job.isApproved = true;
-    await Job.save();
+    job.isApproved = true;
+    await job.save();
 
     res.status(200).json({ message: "Job approved" });
   } catch (err) {
