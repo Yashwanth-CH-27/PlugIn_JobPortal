@@ -31,7 +31,7 @@ exports.approveJob = async (req, res) => {
     }
 
     Job.isApproved = true;
-    await job.save();
+    await Job.save();
 
     res.status(200).json({ message: "Job approved" });
   } catch (err) {
