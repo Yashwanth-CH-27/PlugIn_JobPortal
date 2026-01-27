@@ -4,13 +4,17 @@ const applicationSchema = new mongoose.Schema(
   {
     jobId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "job",
+      ref: "Job",
       required: true,
     },
-    applicationId: {
+    applicantId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+    },
+    recruiterId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Job"
     },
     resumeUrl: {
       type: String,
