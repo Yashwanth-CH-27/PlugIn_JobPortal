@@ -6,6 +6,7 @@ const restrictTo = require("../middlewares/roleMiddleware");
 const {
   createApplication,
   getApplications,
+  updateApplication
 } = require("../controllers/applicationController");
 
 applicationRouter.post(
@@ -20,6 +21,13 @@ applicationRouter.get(
   authentication,
   restrictTo("jobseeker"),
   getApplications,
+);
+
+applicationRouter.get(
+  "/update-application",
+  authentication,
+  restrictTo("recruiter"),
+  updateApplication,
 );
 
 module.exports = applicationRouter;
