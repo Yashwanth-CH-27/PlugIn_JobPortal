@@ -59,7 +59,19 @@ exports.getApplications = async (req, res) => {
 
 exports.updateApplication = async (req, res) => {
   try {
-    const application = await Application.findById(req.params._id);
+    const application = await Application.findById(req.params.id);
+    const allowedUpdate = ["status"];
+    const updates = Object.keys(req.body);
+
+    const isValid = updates.every((field) => allowedUpdate.includes(field));
+
+    if (!isValid) {
+      return res
+        .status(404)
+        .json({ message: "You can only update status of the application" });
+    }
+
+    const { status } = req.body;
 
     if (!application) {
       return res.status(404).json({ message: "No application found" });
@@ -68,18 +80,10 @@ exports.updateApplication = async (req, res) => {
     if (!application.recruiterId.equals(req.user._id)) {
       return res
         .status(404)
-        .json({ message: "You can't update the application" });
+        .json({ message: "You are not authorized to update the application" });
     }
 
-    const allowedUpdate = "status";
-
-    if (!allowedUpdate) {
-      return res
-        .status(404)
-        .json({ message: "You can only update the status of the application" });
-    }
-
-    application[allowedUpdate] = req.body;
+    application.status = status;
     await application.save();
     res.status(200).json("Status updated successfully");
   } catch (err) {

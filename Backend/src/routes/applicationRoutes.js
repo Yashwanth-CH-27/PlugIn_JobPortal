@@ -23,8 +23,8 @@ applicationRouter.get(
   getApplications,
 );
 
-applicationRouter.get(
-  "/update-application",
+applicationRouter.patch(
+  "/update-application/:id",
   authentication,
   restrictTo("recruiter"),
   updateApplication,
