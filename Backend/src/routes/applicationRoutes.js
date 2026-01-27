@@ -9,7 +9,7 @@ const {
 } = require("../controllers/applicationController");
 
 applicationRouter.post(
-  "/create-application",
+  "/create-application/:jobId",
   authentication,
   restrictTo("jobseeker"),
   createApplication,
