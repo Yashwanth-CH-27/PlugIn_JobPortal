@@ -28,7 +28,29 @@ exports.createApplication = async (req, res) => {
       recruiterId: job.createdBy,
       status: "applied",
     });
-    res.status(200).json({ message: "Applied Successfull" });
+    res.status(200).json({ message: "Applied Successfull", application });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getApplications = async (req, res) => {
+  try {
+    const applications = await Application.find({ applicantId: req.user._id })
+      .populate(
+        "jobId",
+        "title company location salaryRange jobType description",
+      )
+      .sort({ createdAt: -1 });
+
+    if (!applications) {
+      return res.status(404).json({ message: "No applications found" });
+    }
+
+    res.status(200).json({
+      applicationsCount: applications.length,
+      applications,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
