@@ -44,7 +44,7 @@ jobRouter.delete(
 );
 
 jobRouter.get(
-  "/viewapplications/:jobId",
+  "/view-applications-owner/:jobId",
   authentication,
   restrictTo("recruiter"),
   recruiterApproval,

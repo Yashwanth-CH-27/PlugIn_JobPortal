@@ -1,9 +1,25 @@
 const express = require("express");
 const applicationRouter = express.Router();
+const authentication = require("../middlewares/authMiddleware");
+const restrictTo = require("../middlewares/roleMiddleware");
 
-// test route
-applicationRouter.get("/", (req, res) => {
-  res.send("application route working");
-});
+const {
+  createApplication,
+  getApplications,
+} = require("../controllers/applicationController");
 
-module.exports = applicationRouter ;
+applicationRouter.post(
+  "/create-application",
+  authentication,
+  restrictTo("jobseeker"),
+  createApplication,
+);
+
+applicationRouter.get(
+  "/view-applications",
+  authentication,
+  restrictTo("jobseeker"),
+  getApplications,
+);
+
+module.exports = applicationRouter;
