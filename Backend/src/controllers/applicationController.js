@@ -1,5 +1,6 @@
 const Job = require("../models/job");
 const Application = require("../models/application");
+const { findById } = require("../models/user");
 
 exports.createApplication = async (req, res) => {
   try {
@@ -51,6 +52,36 @@ exports.getApplications = async (req, res) => {
       applicationsCount: applications.length,
       applications,
     });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateApplication = async (req, res) => {
+  try {
+    const application = await Application.findById(req.params._id);
+
+    if (!application) {
+      return res.status(404).json({ message: "No application found" });
+    }
+
+    if (!application.recruiterId.equals(req.user._id)) {
+      return res
+        .status(404)
+        .json({ message: "You can't update the application" });
+    }
+
+    const allowedUpdate = "status";
+
+    if (!allowedUpdate) {
+      return res
+        .status(404)
+        .json({ message: "You can only update the status of the application" });
+    }
+
+    application[allowedUpdate] = req.body;
+    await application.save();
+    res.status(200).json("Status updated successfully");
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
