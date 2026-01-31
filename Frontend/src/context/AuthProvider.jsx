@@ -1,11 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
-import { loginUser, logoutUser } from "../api/authApi";
+import { getMe, loginUser, logoutUser } from "../api/authApi";
 import toast from "react-hot-toast";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const res = await getMe();
+        setUser(res.data.user);
+      } catch {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadUser();
+  }, []);
 
   const login = async (formData) => {
     try {
