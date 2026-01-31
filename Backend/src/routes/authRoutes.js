@@ -1,5 +1,6 @@
 const express = require("express");
 const authRouter = express.Router();
+const authentication = require("../middlewares/authMiddleware")
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 
@@ -106,5 +107,22 @@ authRouter.post("/logout", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+authRouter.get("/me", authentication , async (req, res) => {
+  try {
+    res.status(200).json({
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        role: req.user.role,
+        isApproved: req.user.isApproved,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 
 module.exports = authRouter;
