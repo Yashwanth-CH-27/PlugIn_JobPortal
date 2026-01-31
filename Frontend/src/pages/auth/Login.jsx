@@ -32,7 +32,7 @@ const Login = () => {
           placeholder="password"
         />
         <button disabled={loading} type="submit">
-          {loading ? "Logging in..." : "Login"}
+          Login
         </button>
       </form>
     </div>
