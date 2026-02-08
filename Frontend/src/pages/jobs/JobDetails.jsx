@@ -41,8 +41,9 @@ const JobDetails = () => {
     }
 
     try {
-      applyLoading(true);
-      await applyJob(jobId);
+      setApplyLoading(true);
+      const res = await applyJob(jobId);
+      console.log(res)
       toast.success("Applied Successfully!");
     } catch (err) {
       toast.error(err?.response?.data?.message || "Apply Failed");
